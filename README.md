@@ -1,6 +1,6 @@
-__ ZFS on ClearLinux __
+# ZFS on ClearLinux
 
-# Background
+## Background
 
 Clear Linux does not, and will likely never, ship with a
 binary kernel module to support ZFS (zfs.ko). There is a
@@ -35,7 +35,7 @@ both against and in favor of binary distribution, the CDDL and
 GPL are not incompatible with respect to redistribution of
 source code.
 
-# Key Issues for the User
+## Key Issues for the User
 
 Since it is legal to use ZFS with Linux, there is nothing
 stopping a user from downloading the ZFS drivers, compiling
@@ -57,13 +57,13 @@ native kernel and ZFS on root, clr-boot-manager will refuse to update
 your kernels, so you will have to get comfortable with installing new
 kernels to systemd-boot, which is a good skill to have in any case.
 
-# Non-Root
+## Non-Root
 
 Before jumping all the way in to running your CLR_ROOT partition
 on a ZFS dataset, you should verify that you can get ZFS working
 for a data-only partition.
 
-# Implications
+## Implications
 
 If you use ZFS exclusively on a partition other than root, you may run
 into problems when a new kernel is released.
@@ -79,7 +79,7 @@ automatically install new kernels for you: you'll have to set them up
 manually when updated kernels are available. Hopefully, the last paragraph
 makes clear why *this is a good thing*.
 
-# DKMS
+## DKMS
 
 This tutorial assumes you are using a DKMS kernel. In theory, it
 should be possible to compile the ZFS module into your kernel, but
@@ -102,13 +102,13 @@ you need a dkms.conf file, which is not included in the zfs source.
 
 TODO -- Using DKMS to rebuild ZFS against new kernels. (./configure --enable-systemd)
 
-# Getting the ZFS code
+## Getting the ZFS code
 
 The ZFS codebase moves quickly, just like the kernel codebase. Therefore
 it's best that you get the source code from the ZFS on Linux repository,
 hosted on Github.
 
-## How the ZFS on Linux github repository is organized
+### How the ZFS on Linux github repository is organized
 
 The master branch contains the latest code and bugfixes, but may also be bleeding edge.
 
@@ -119,7 +119,7 @@ The latest tag or the latest release branch is likely the one you want:
 
 `zfs-0.8-release (in sync with zfs-0.8.4 tag)`
 
-## Selecting the right combination of ZFS module code and kernel code
+### Selecting the right combination of ZFS module code and kernel code
 
 Ensure that the kernel you are using can be used with the ZFS kernel module.
 Depending on whether you are using a LTS or mainline kernel, you may need to s
@@ -133,7 +133,7 @@ Generally speaking, you want to download the latest ZFS release, and you *might*
 to use a kernal that is behind by a dot-release or two. If you cannot get ZFS to build against
 your native kernel, try an lts kernel.
 
-# Prerequisites
+## Prerequisites
 
 You need several build tools before you can install ZFS.
 
@@ -141,7 +141,7 @@ If you are using a native kernel: `sudo swupd bundle-add linux-dev`
 If you are using an LTS kernel: `sudo swupd bundle-add linux-lts-dev`
 
 
-# Building
+## Building
 Once you have fetched the zfs codebase as described in the previous
 section, you can build using the following commands:
 
@@ -154,14 +154,14 @@ make -s -j$(nproc)
 
 You can test-drive zfs without installing it.
 
-# Installing
+## Installing
 
 If you are satisfied with your build, you can now run:
 
 `sudo make install`
 
 This will install the zfs userspace tools to:
-
+```
 + /usr/local/
 |--+ bin/
    |--zvol_wait
@@ -193,24 +193,20 @@ This will install the zfs userspace tools to:
 |--+ src/
    |--+ zfs-0.8.4/
    |--+ spl-0.8.4/
-
+```
 And it will deliver the zfs kernel modules to:
 
-/usr/lib/modules/<kernel-name>/extra/zfs
+`/usr/lib/modules/<kernel-name>/extra/zfs`
 
 Fortunately, `swupd repair` will not delete kernel modules from this location.
 
-# Staying up-to-date
+## Staying up-to-date
 
 **IMPORTANT** When you install a new kernel, you've got to reinstall the zfs modules.
 
-You can automate that process with this hook:
+@TODO: Insert DKMS details here
 
-```
-
-```
-
-# Loading the new kernel module at boot
+## Loading the new kernel module at boot
 
 The zfs module will not load automatically at boot. To make it do so -- in a non-root configuration -- you can load the zfs.ko module at boot time by
 specifying to systemd that you want the out-of-tree module to be loaded.
@@ -226,13 +222,13 @@ Then create the configuration file with:
 
 When you reboot, zfs should be loaded by the kernel automatically.
 
-# Using on a Non-Root device
+## Using on a Non-Root device
 
 You're ready to create zpools and datasets.
 
-# ZFS on root (/)
+## ZFS on root (/)
 
-## Installing new kernels
+### Installing new kernels with ZFS root
 
 Whenever a new kernel is available, which in Clear Linux is
 often if you use a native-series kernel, you will find that
