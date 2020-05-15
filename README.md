@@ -58,15 +58,21 @@ invariably break *something* in ZFS. The ZFS-on-Linux team is
 very good about catching up quickly, but on occasion you will find
 a lag between a new kernel release and a supprted ZFS driver.
 
-For this reason, if you are going to run ZFS on root, I recommend
-you use a long term support kernel along with the latest ZFS driver.
+
+## Root installations
+
+Since there is a lag between kernel releases and ZFS support, I recommend
+that you use a long term support kernel along with the latest ZFS driver
+if you are going to run ZFS on root.
 
 If you choose to use a native kernel and ZFS on root, clr-boot-manager
 will refuse to update your kernels, so you will have to get comfortable
-with installing newkernels to systemd-boot, which is a good skill to
+with installing new kernels to systemd-boot, which is a good skill to
 have in any case.
 
-## Non-Root
+We will explore ZFS on root after we get a working ZFS driver for non-root disks.
+
+## Non-Root installation
 
 Before making the decision to run your CLR_ROOT partition
 on a ZFS dataset, you should verify that you can get ZFS working
