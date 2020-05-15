@@ -138,9 +138,9 @@ If you are using an LTS kernel:
  
   `sudo swupd bundle-add linux-lts-dev`
   
-You also need the header files located in this bundle: 
+You also need these bundles: 
 
-  `sudo swupd bundle-add os-core-dev`
+  `sudo swupd bundle-add os-core-dev devpkg-openssl devpkg-util-linux`
 
 ## Installing and Running ZFS
 
