@@ -250,8 +250,11 @@ That can be automated in most cases with a dkms.conf file.
 
 ## Loading the new kernel module at boot
 
-The zfs module will not load automatically at boot. To make it do so -- in a non-root configuration -- you can load the zfs.ko module at boot time by
-specifying to systemd that you want the out-of-tree module to be loaded.
+The zfs module will not load automatically at boot. To make it do so -- in a non-root configuration -- you can load the zfs.ko module at boot time by specifying to systemd that you want the out-of-tree module to be loaded.
+
+First, make sure your system will allow unsigned modules: 
+
+    `echo "module.sig_unenforce" | sudo tee /etc/kernel/cmdline.d/allow-unsigned-modules.conf`
 
 Clear Linux and systemd use the `/etc/modules-load.d/` directory to load
 out-of-tree kernel modules. Make sure that the directory exists:
