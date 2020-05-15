@@ -107,28 +107,36 @@ should be possible to compile the ZFS module into your kernel, but
 
 You should read and understand the [Clear Linux tutorial on DKMS](https://docs.01.org/clearlinux/latest/guides/kernel/kernel-modules-dkms.html?highlight=dkms).
 
-To check whether you have an lts or native kernel:
-`uname -r`
+To check whether you have an lts or native kernel:  
 
-If 'native' appears in the kernel name:
-`sudo swupd bundle-add kernel-native-dkms`
+`uname -r`  
 
-If 'lts' appears in the kernel name:
-`sudo swupd bundle-add kernel-lts-dkms`
+If 'native' appears in the kernel name:  
 
+`sudo swupd bundle-add kernel-native-dkms`  
+
+If 'lts' appears in the kernel name:  
+
+`sudo swupd bundle-add kernel-lts-dkms`  
+  
 Reboot and make sure you can start the new kernel.
-
+  
 In order to make Clear Linux rebuild ZFS against new kernels using DKMS,
 you need a dkms.conf file, which is not included in the zfs source.
-
+  
 TODO -- Using DKMS to rebuild ZFS against new kernels. (./configure --enable-systemd)
-
+  
 ### Bundles
 
 You need several build tools before you can install ZFS.
 
-If you are using a native kernel: `sudo swupd bundle-add linux-dev`
-If you are using an LTS kernel: `sudo swupd bundle-add linux-lts-dev`
+If you are using a native kernel:   
+
+  `sudo swupd bundle-add linux-dev`
+
+If you are using an LTS kernel:  
+ 
+  `sudo swupd bundle-add linux-lts-dev`
 
 ## Installing and Running ZFS
 
