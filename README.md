@@ -1,5 +1,12 @@
 # ZFS on ClearLinux
 
+This tutorial is not quite ready for prime-time. I think
+a reasonably skilled Linux user will be able to use these
+steps to get up and running with ZFS on Clear.
+
+If you use this document, YMMV and you might break stuff. Be
+careful.
+
 ## Background
 
 Clear Linux does not, and will likely never, ship with a
@@ -35,7 +42,7 @@ both against and in favor of binary distribution, the CDDL and
 GPL are not incompatible with respect to redistribution of
 source code.
 
-## Key Issues for the User
+## So What?
 
 Since it is legal to use ZFS with Linux, there is nothing
 stopping a user from downloading the ZFS drivers, compiling
@@ -51,22 +58,23 @@ invariably break *something* in ZFS. The ZFS-on-Linux team is
 very good about catching up quickly, but on occasion you will find
 a lag between a new kernel release and a supprted ZFS driver.
 
-For this reason, if you are going to run ZFS on root (/), I recommend
-you use a long term support kernel (lts). If you choose to use a
-native kernel and ZFS on root, clr-boot-manager will refuse to update
-your kernels, so you will have to get comfortable with installing new
-kernels to systemd-boot, which is a good skill to have in any case.
+For this reason, if you are going to run ZFS on root, I recommend
+you use a long term support kernel along with the latest ZFS driver.
+
+If you choose to use a native kernel and ZFS on root, clr-boot-manager
+will refuse to update your kernels, so you will have to get comfortable
+with installing newkernels to systemd-boot, which is a good skill to
+have in any case.
 
 ## Non-Root
 
-Before jumping all the way in to running your CLR_ROOT partition
+Before making the decision to run your CLR_ROOT partition
 on a ZFS dataset, you should verify that you can get ZFS working
 for a data-only partition.
 
-## Implications
-
-If you use ZFS exclusively on a partition other than root, you may run
-into problems when a new kernel is released.
+If you use ZFS on a partition other than CLR_ROOT, with a root
+partition that is ext4, xfs, or f2fs you may run into problems mounting
+ZFS when a new kernel is released (until I have DKMS working).
 
 In this configuration, clr-boot-manager will install your new kernel,
 which may or may not work with zfs.ko. You may end up having to recompile
@@ -79,12 +87,19 @@ automatically install new kernels for you: you'll have to set them up
 manually when updated kernels are available. Hopefully, the last paragraph
 makes clear why *this is a good thing*.
 
-## DKMS
+## Prerequisites
+
+Before building ZFS, you need:
+
+### A DKMS Kernel
 
 This tutorial assumes you are using a DKMS kernel. In theory, it
 should be possible to compile the ZFS module into your kernel, but
 1) I didn't do this, so I can't help you and 2) you'll have to compile
 all of your new kernels from now on, which is likely to lead to problems.
+
+You should read and understand the (Clear Linux tutorial on DKMS)[https://docs.01.org/clearlinux/latest/guides/kernel/kernel-modules-dkms.html?highlight=dkms
+].
 
 To check whether you have an lts or native kernel:
 `uname -r`
@@ -102,13 +117,23 @@ you need a dkms.conf file, which is not included in the zfs source.
 
 TODO -- Using DKMS to rebuild ZFS against new kernels. (./configure --enable-systemd)
 
-## Getting the ZFS code
+### Bundles
+
+You need several build tools before you can install ZFS.
+
+If you are using a native kernel: `sudo swupd bundle-add linux-dev`
+If you are using an LTS kernel: `sudo swupd bundle-add linux-lts-dev`
+
+
+## Installing and Running ZFS
+
+### Get the ZFS code
 
 The ZFS codebase moves quickly, just like the kernel codebase. Therefore
 it's best that you get the source code from the ZFS on Linux repository,
 hosted on Github.
 
-### How the ZFS on Linux github repository is organized
+#### How the ZFS on Linux github repository is organized
 
 The master branch contains the latest code and bugfixes, but may also be bleeding edge.
 
@@ -119,7 +144,7 @@ The latest tag or the latest release branch is likely the one you want:
 
 `zfs-0.8-release (in sync with zfs-0.8.4 tag)`
 
-### Selecting the right combination of ZFS module code and kernel code
+#### Selecting the right combination of ZFS module code and kernel code
 
 Ensure that the kernel you are using can be used with the ZFS kernel module.
 Depending on whether you are using a LTS or mainline kernel, you may need to s
@@ -133,15 +158,9 @@ Generally speaking, you want to download the latest ZFS release, and you *might*
 to use a kernal that is behind by a dot-release or two. If you cannot get ZFS to build against
 your native kernel, try an lts kernel.
 
-## Prerequisites
 
-You need several build tools before you can install ZFS.
+### Building
 
-If you are using a native kernel: `sudo swupd bundle-add linux-dev`
-If you are using an LTS kernel: `sudo swupd bundle-add linux-lts-dev`
-
-
-## Building
 Once you have fetched the zfs codebase as described in the previous
 section, you can build using the following commands:
 
@@ -152,9 +171,14 @@ cd zfs
 make -s -j$(nproc)
 ```
 
-You can test-drive zfs without installing it.
+### Testing your build
 
-## Installing
+You can -- and SHOULD -- test-drive zfs before installing it.
+
+See ./scripts/zfs-tests.sh
+
+
+### Installing
 
 If you are satisfied with your build, you can now run:
 
