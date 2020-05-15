@@ -77,15 +77,15 @@ partition that is ext4, xfs, or f2fs you may run into problems mounting
 ZFS when a new kernel is released (until I have DKMS working).
 
 In this configuration, clr-boot-manager will install your new kernel,
-which may or may not work with zfs.ko. You may end up having to recompile
-zfs.ko with updated code, or zfs *might* not compile at all with the new kernel.
-So, be sure you don't put anything on that ZFS pool that you would need
-in order to rebuild kernel modules.
+which may or may not work with zfs.ko.
 
-To reiterate: if you use ZFS for your CLR_ROOT, then clr-boot-manager will no longer
-automatically install new kernels for you: you'll have to set them up
-manually when updated kernels are available. Hopefully, the last paragraph
-makes clear why *this is a good thing*.
+- DKMS may not have rebuilt the module
+- DKMS may not have autoinstalled the module
+- The new kernel might introduce breaking changes that prevent zfs from compiling
+
+You may end up having to manually recompile zfs.ko with the new kernel code, and zfs *might*
+not compile at all with the new kernel. **So, be sure you don't put anything on that ZFS pool that you would need
+in order to rebuild kernel modules.**
 
 ## Prerequisites
 
@@ -123,7 +123,6 @@ You need several build tools before you can install ZFS.
 
 If you are using a native kernel: `sudo swupd bundle-add linux-dev`
 If you are using an LTS kernel: `sudo swupd bundle-add linux-lts-dev`
-
 
 ## Installing and Running ZFS
 
@@ -254,9 +253,13 @@ You're ready to create zpools and datasets.
 
 ### Installing new kernels with ZFS root
 
-Whenever a new kernel is available, which in Clear Linux is
-often if you use a native-series kernel, you will find that
-the Clear Linux tools will refuse to install your new kernel
+If you use ZFS for your CLR_ROOT, then clr-boot-manager will no longer
+automatically install new kernels for you: you'll have to set them up
+manually when updated kernels are available.
+
+Hopefully, by now you understand why *this is a good thing*.
+
+When a new kernel is available, you will find that the Clear Linux tools will refuse to install your new kernel
 with an error similar to this:
 ```
 Calling post-update helper scripts
