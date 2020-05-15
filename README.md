@@ -137,6 +137,10 @@ If you are using a native kernel:
 If you are using an LTS kernel:  
  
   `sudo swupd bundle-add linux-lts-dev`
+  
+You also need the header files located in this bundle: 
+
+  `sudo swupd bundle-add os-core-dev`
 
 ## Installing and Running ZFS
 
@@ -239,7 +243,8 @@ Fortunately, `swupd repair` will not delete kernel modules from this location.
 
 ## Staying up-to-date
 
-**IMPORTANT** When you install a new kernel, you've got to reinstall the zfs modules.
+**IMPORTANT** When you install a new kernel, you've got to reinstall the zfs modules. 
+That can be automated in most cases with a dkms.conf file.
 
 @TODO: Insert DKMS details here
 
