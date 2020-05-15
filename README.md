@@ -257,6 +257,8 @@ You're ready to create zpools and datasets.
 
 ## ZFS on root (/)
 
+WIP
+
 ### Installing new kernels with ZFS root
 
 If you use ZFS for your CLR_ROOT, then clr-boot-manager will no longer
