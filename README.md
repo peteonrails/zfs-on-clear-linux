@@ -109,15 +109,15 @@ You should read and understand the [Clear Linux tutorial on DKMS](https://docs.0
 
 To check whether you have an lts or native kernel:  
 
-`uname -r`  
+    uname -r
 
 If 'native' appears in the kernel name:  
 
-`sudo swupd bundle-add kernel-native-dkms`  
+    sudo swupd bundle-add kernel-native-dkms
 
 If 'lts' appears in the kernel name:  
 
-`sudo swupd bundle-add kernel-lts-dkms`  
+    sudo swupd bundle-add kernel-lts-dkms 
   
 Reboot and make sure you can start the new kernel.
   
@@ -132,15 +132,15 @@ You need several build tools before you can install ZFS.
 
 If you are using a native kernel:   
 
-  `sudo swupd bundle-add linux-dev`
+    sudo swupd bundle-add linux-dev
 
 If you are using an LTS kernel:  
  
-  `sudo swupd bundle-add linux-lts-dev`
-  
+    sudo swupd bundle-add linux-lts-dev
+   
 You also need these bundles: 
 
-  `sudo swupd bundle-add os-core-dev devpkg-openssl devpkg-util-linux`
+    sudo swupd bundle-add os-core-dev devpkg-openssl devpkg-util-linux
 
 ## Installing and Running ZFS
 
@@ -181,12 +181,10 @@ your native kernel, try an lts kernel.
 Once you have fetched the zfs codebase as described in the previous
 section, you can build using the following commands:
 
-```
-cd zfs
-./autogen.sh
-./configure
-make -s -j$(nproc)
-```
+    cd zfs
+    ./autogen.sh
+    ./configure
+    make -s -j$(nproc)
 
 ### Testing your build
 
@@ -199,7 +197,7 @@ See ./scripts/zfs-tests.sh
 
 If you are satisfied with your build, you can now run:
 
-`sudo make install`
+    sudo make install
 
 This will install the zfs userspace tools to:
 ```
@@ -237,7 +235,7 @@ This will install the zfs userspace tools to:
 ```
 And it will deliver the zfs kernel modules to:
 
-`/usr/lib/modules/<kernel-name>/extra/zfs`
+    /usr/lib/modules/<kernel-name>/extra/zfs 
 
 Fortunately, `swupd repair` will not delete kernel modules from this location.
 
@@ -254,16 +252,16 @@ The zfs module will not load automatically at boot. To make it do so -- in a non
 
 First, make sure your system will allow unsigned modules: 
 
-    `echo "module.sig_unenforce" | sudo tee /etc/kernel/cmdline.d/allow-unsigned-modules.conf`
+    echo "module.sig_unenforce" | sudo tee /etc/kernel/cmdline.d/allow-unsigned-modules.conf
 
 Clear Linux and systemd use the `/etc/modules-load.d/` directory to load
 out-of-tree kernel modules. Make sure that the directory exists:
 
-`sudo mkdir -p /etc/modules-load.d`
+    sudo mkdir -p /etc/modules-load.d
 
 Then create the configuration file with:
 
-`sudo echo "zfs" | sudo tee /etc/modules-load.d/01-zfs.conf`
+    sudo echo "zfs" | sudo tee /etc/modules-load.d/01-zfs.conf 
 
 When you reboot, zfs should be loaded by the kernel automatically.
 
@@ -285,18 +283,17 @@ Hopefully, by now you understand why *this is a good thing*.
 
 When a new kernel is available, you will find that the Clear Linux tools will refuse to install your new kernel
 with an error similar to this:
-```
-Calling post-update helper scripts
-External command: none
-External command: [ERROR] cbm (../src/lib/system_stub.c:L31): Invalid block device: 0:29
-External command: Out of memory
-External command: [FATAL] cbm (../src/bootman/sysconfig.c:L277): sysconfig insane: Missing root device
-External command: [FATAL] cbm (../src/bootman/update.c:L389): Failed to install bootloader
-External command: [FATAL] cbm (../src/bootman/sysconfig.c:L277): sysconfig insane: Missing root device
-External command: [ERROR] cbm (../src/bootman/update.c:L218): Failed to repair running kernel
-External command: [FATAL] cbm (../src/bootman/sysconfig.c:L277): sysconfig insane: Missing root device
-External command: [FATAL] cbm (../src/bootman/update.c:L250): Failed to install default-native kernel: ///usr/lib/kernel/org.clearlinux.native.5.6.12-950
-```
+
+    Calling post-update helper scripts
+    External command: none
+    External command: [ERROR] cbm (../src/lib/system_stub.c:L31): Invalid block device: 0:29
+    External command: Out of memory
+    External command: [FATAL] cbm (../src/bootman/sysconfig.c:L277): sysconfig insane: Missing root device
+    External command: [FATAL] cbm (../src/bootman/update.c:L389): Failed to install bootloader
+    External command: [FATAL] cbm (../src/bootman/sysconfig.c:L277): sysconfig insane: Missing root device
+    External command: [ERROR] cbm (../src/bootman/update.c:L218): Failed to repair running kernel
+    External command: [FATAL] cbm (../src/bootman/sysconfig.c:L277): sysconfig insane: Missing root device
+    External command: [FATAL] cbm (../src/bootman/update.c:L250): Failed to install default-native kernel: ///usr/lib/kernel/org.clearlinux.native.5.6.12-950
 
 The root cause is that clr-boot-manager does not understand the ZFS partition type. This
 bug is not unique to ZFS -- it also occurs with a BTRFS root partition. These github
