@@ -105,8 +105,7 @@ should be possible to compile the ZFS module into your kernel, but
 1) I didn't do this, so I can't help you and
 2) you'll have to compile all of your new kernels from now on, which is likely to lead to problems.
 
-You should read and understand the (Clear Linux tutorial on DKMS)[https://docs.01.org/clearlinux/latest/guides/kernel/kernel-modules-dkms.html?highlight=dkms
-].
+You should read and understand the [Clear Linux tutorial on DKMS](https://docs.01.org/clearlinux/latest/guides/kernel/kernel-modules-dkms.html?highlight=dkms).
 
 To check whether you have an lts or native kernel:
 `uname -r`
